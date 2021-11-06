@@ -13,8 +13,8 @@ function App() {
   const getTasks = () =>{
     console.log( `in getTasks` );
     axios.get( '/todo').then( (response )=>{
-      console.log( response.data );
       setTasks( response.data );
+      console.log( tasks )
     }).catch( ( error ) =>{
       alert( `Error getting tasks!`);
       console.log( `Error getting tasks from database` );
@@ -24,9 +24,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>React To-Do List</h1>
+        <h1>To-Do List</h1>
       </header>
-      <Body tasks={ tasks }/>
+      <Body tasks={ tasks } getTasks={getTasks}/>
     </div>
   );
 }

@@ -2,8 +2,11 @@
 const express = require( 'express' );
 const app = express();
 const todo = require( './routes/todo.route' );
+const bodyParser = require( 'body-parser' );
 
 //uses
+app.use( bodyParser.urlencoded( { extended:true } ) );
+app.use( bodyParser.json() );
 app.use( '/todo', todo );
 
 //global
