@@ -1,5 +1,5 @@
 import axios from "axios";
-import react from "react";
+import React from "react";
 import { useEffect, useState } from "react";
 import './AddTask.css'
 
@@ -14,7 +14,7 @@ function AddTask( props ){
         setNewTask( {...newTask, taskName: event.target.value })
     }
 
-    const handleAssignedToChange = ( event )=>{
+    const handleAssignedToChange = ( event )=>{ 
         setNewTask( {...newTask, assignedTo: event.target.value })
     }
 

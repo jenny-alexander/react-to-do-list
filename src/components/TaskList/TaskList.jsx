@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import { useEffect, useState } from "react";
 import './TaskList.css'
 import TaskItem from '../TaskItem/TaskItem';
@@ -8,11 +8,13 @@ function TaskList( props ){
 
     return (
         <div>
-            <table class="table table-hover"><caption>List of tasks</caption><thead>
+            <p>{JSON.stringify( props.list )}</p>
+            <table class="table"><caption>List of tasks</caption><thead>
             <tr><th>Completed</th><th>Task</th><th>Assigned To</th>
             <th>Date Completed</th><th>Actions</th></tr></thead><tbody>
             { 
                 props.list.map( ( thisTask ) =>(
+                    
                 <TaskItem key={ thisTask.id } task={thisTask} getTasks={props.getTasks} /> ) )
             }
             </tbody></table>

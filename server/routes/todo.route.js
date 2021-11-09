@@ -4,6 +4,11 @@ const { application } = require('express');
 //DB Connection
 const pool = require( '../modules/pool' );
 
+const replaceApostrophe = ( singleApostropheString )=>{
+    let doubleApostropheString = singleApostropheString.replace( /'/g, "''");
+    return doubleApostropheString;
+}
+
 //GET Route
 router.get( '/', ( req, res ) =>{
     const queryString = `SELECT * from tasks ORDER BY id DESC;`;
@@ -41,9 +46,18 @@ router.post('/', ( req, res )=>{
 
 //PUT Route for completing task 
 router.put( '/completed/:id', ( req, res )=>{
+    console.log( req.body )
+    //Do some minor data manipulation to ensure the database accepts the values from the front-end.
+    replaceApostrophe( req.body.dateCompleted );
+    if( typeof req.body.dateCompleted === 'string' ) {
+        req.body.dateCompleted = "'" + req.body.dateCompleted + "'";
+    }
+
     const queryString = `UPDATE tasks SET date_completed = ${req.body.dateCompleted},
                                           completed = ${req.body.completed}
                          WHERE id = ${req.params.id};`;
+    console.log( queryString);
+
     pool.query( queryString ).then( ( results )=>{
         res.sendStatus( 200 );
     }).catch( ( error )=>{
