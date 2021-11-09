@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import './TaskItem.css';
 import Swal from "sweetalert2";
 
@@ -38,13 +38,6 @@ function TaskItem( props ) {
         )
     }
     const removeTask = ( )=>{
-        // axios.delete(`/todo/delete/${task.id}`, task ).then( (response ) =>{
-        //     props.getTasks();
-        // }).catch( ( error ) =>{
-        //     console.log( error );
-        //     alert( `Error deleting task!`);
-        // })
-
         Swal.fire({
             title: 'Would you like to delete the task?',
             showDenyButton: true,

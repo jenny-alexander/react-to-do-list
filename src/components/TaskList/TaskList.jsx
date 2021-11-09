@@ -7,8 +7,8 @@ function TaskList( props ){
     //const[ name, useName ] = useState( null );
 
     return (
-        <div>
-            <table class="table"><caption>List of tasks</caption><thead>
+        <div className="outputDiv">
+            <table class="table table-fixed"><caption>List of tasks</caption><thead id="tableHeader" class="table-light">
             <tr><th>Completed</th><th>Task</th><th>Assigned To</th>
             <th>Date Completed</th><th>Actions</th></tr></thead><tbody>
             { 

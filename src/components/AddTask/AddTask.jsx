@@ -40,11 +40,11 @@ function AddTask( props ){
                     <p id="addTaskTitle">Add a task:</p>
                 </div>
                 <div class="row">
-                    <div class="col-5">
+                    <div class="col-6">
                     <input type="text" class="form-control" id="taskName" placeholder="Task Name"
                             onChange= { ( event )=>handleTaskNameChange ( event ) } required/>
                     </div>
-                    <div class="col-5">
+                    <div class="col-4">
                     <input type="text" class="form-control" id="assignedTo" placeholder="AssignedTo"
                             onChange={ ( event )=>handleAssignedToChange( event ) } required />
                     </div>                
