@@ -46,18 +46,14 @@ router.post('/', ( req, res )=>{
 
 //PUT Route for completing task 
 router.put( '/completed/:id', ( req, res )=>{
-    console.log( req.body )
     //Do some minor data manipulation to ensure the database accepts the values from the front-end.
     replaceApostrophe( req.body.dateCompleted );
     if( typeof req.body.dateCompleted === 'string' ) {
         req.body.dateCompleted = "'" + req.body.dateCompleted + "'";
     }
-
     const queryString = `UPDATE tasks SET date_completed = ${req.body.dateCompleted},
                                           completed = ${req.body.completed}
                          WHERE id = ${req.params.id};`;
-    console.log( queryString);
-
     pool.query( queryString ).then( ( results )=>{
         res.sendStatus( 200 );
     }).catch( ( error )=>{
@@ -69,9 +65,16 @@ router.put( '/completed/:id', ( req, res )=>{
 //PUT Route for updating task name and assigned to values
 router.put( '/update/:id', ( req, res )=>{
     console.log( `in PUT UPDATE with req.body:,`, req.body );
+    //Do some minor data manipulation to ensure the database accepts the values from the front-end.
+    replaceApostrophe( req.body.dateCompleted );
+    if( typeof req.body.dateCompleted === 'string' ) {
+        req.body.dateCompleted = "'" + req.body.dateCompleted + "'";
+    }
+
     const queryString = `UPDATE tasks SET task_name = ${req.body.taskName},
                                           assigned_to = ${req.body.assignedTo}
                          WHERE id = ${req.params.id};`;
+                         
     pool.query( queryString ).then( ( results )=>{
         res.sendStatus( 200 );
     }).catch( ( error )=>{

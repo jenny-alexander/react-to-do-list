@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import './TaskItem.css';
+import Swal from "sweetalert2";
 
 function TaskItem( props ) {
 
@@ -37,12 +38,51 @@ function TaskItem( props ) {
         )
     }
     const removeTask = ( )=>{
-        axios.delete(`/todo/delete/${task.id}`, task ).then( (response ) =>{
-            props.getTasks();
-        }).catch( ( error ) =>{
-            console.log( error );
-            alert( `Error deleting task!`);
-        })
+        // axios.delete(`/todo/delete/${task.id}`, task ).then( (response ) =>{
+        //     props.getTasks();
+        // }).catch( ( error ) =>{
+        //     console.log( error );
+        //     alert( `Error deleting task!`);
+        // })
+
+        Swal.fire({
+            title: 'Would you like to delete the task?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Yes',
+            confirmButtonColor: '#4CAF50',
+            denyButtonText: `No`,
+            denyButtonColor: '#78808C',
+          }).then( ( result ) => {
+            if ( result.isConfirmed ) {    
+                axios.delete(`/todo/delete/${task.id}`, task ).then( (response ) =>{
+                //use sweetalert functionality
+                Swal.fire({
+                  title: 'Success!',
+                  text: "Item deleted!",
+                  icon: 'success',
+                  showCancelButton: false,
+                  showCloseButton: true,
+                  confirmButtonColor: '#3da133',
+                  confirmButtonText: 'Ok!'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    props.getTasks();
+                  }
+                })   
+              }).catch( ( error ) =>{
+                  console.log( error );
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops, something went wrong!',
+                    text: 'There was an error removing the item.',
+                    footer: 'Check console for details.'
+                  })             
+              })
+            }
+          })
+
+
     }
     const completeTask = ( )=>{        
         //The following is a workaround in order to get the completed date and completed status reflected on the DOM
@@ -54,10 +94,8 @@ function TaskItem( props ) {
         setTask( task.completed = true ); //--> TODO: Also, setting to true in DB since couldn't get this hook to work
         setTask( task.dateCompleted = new Date().toISOString() );
         setTask( {...task}); //<--------TODO: Need help with this. This is the only way I could get the updated row to show.
-
-        console.log( `in completeTask after setTask and task is:`, task );
         
-        //updateDBForComplete( task );
+        //updateDBForComplete( task ); //<---------Testing something out here
 
         //make a call to server via axios 
         axios.put( `/todo/completed/${task.id}`, task ).then( ( response )=>{
@@ -68,7 +106,9 @@ function TaskItem( props ) {
         });
         
     }
+    const editTask = ( )=>{
 
+    }
 //----------------->BEGIN TRYING THIS OUT
 
           // Call the updateDBForComplete function in order to update the db and delay --->DIDN'T WORK
