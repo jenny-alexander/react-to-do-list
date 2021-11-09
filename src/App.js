@@ -11,10 +11,10 @@ function App() {
   }, [] )
 
   const getTasks = () =>{
-    console.log( `in getTasks` );
+    //console.log( `in getTasks` );
     axios.get( '/todo').then( (response )=>{
       setTasks( response.data );
-      console.log( tasks )
+      //console.log( tasks )
     }).catch( ( error ) =>{
       alert( `Error getting tasks!`);
       console.log( `Error getting tasks from database` );

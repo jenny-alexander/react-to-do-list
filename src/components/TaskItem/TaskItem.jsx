@@ -32,7 +32,7 @@ function TaskItem( props ) {
     }
     function EditButton( ) {
         return (
-            <button class="btn btn-default btn-outline-secondary" id="editTaskButton">
+            <button class="btn btn-default btn-outline-secondary" id="editTaskButton" onClick={editTask}>
                 <img src="/images/pencil.svg" alt="edit" width="15" height="15" />
             </button>
         )
@@ -106,35 +106,64 @@ function TaskItem( props ) {
         });
         
     }
-    const editTask = ( )=>{
+    const editTask = async ( )=>{
+        //Display SweetAlert popup to user and allow the user to enter task name and assigned to
+        const { value: formValues } = await Swal.fire({
+            title: 'Edit task',
+            html:
+            `<label>Enter task name and assigned to:</label>` +
+            `<input id="swal-taskName" type="text" placeholder="${task.taskName}" class="swal2-input">` +
+            `<input id="swal-assignedTo" type="text" placeholder="${task.assignedTo}" class="swal2-input">`,
+                focusConfirm: false,
+                showCancelButton: true,
+                showCloseButton: true,
+                //here we are grabbing the values entered by the user
+                preConfirm: () => {
+                    //since task name is mandatory on DB, check to make sure it was entered in popup
+                    if ( document.getElementById( 'swal-taskName').value ) {
+                        return [
+                            document.getElementById('swal-taskName' ).value,                        
+                            document.getElementById('swal-assignedTo' ).value                        
+                        ]
+                    } else {                    
+                        Swal.showValidationMessage( 'Task name missing!' ); 
+                    }
+            }
+        })      
+        if (formValues) {
+            //First, make sure user enters a task name
+            if ( formValues[0] ) {
+
+                //Get what was input by user and send to DB without checking to see if anything actually changed.
+                //Build the data string to get sent to PUT method on server side.
+                let taskNameFromSwal = `${formValues[0]}`;
+                let taskAssignedToFromSwal = `${formValues[1]}`;
+                let taskObject = {
+                    task_name : taskNameFromSwal,
+                    assigned_to: taskAssignedToFromSwal
+                }
+                
+                axios.put( `/todo/update/${task.id}`, taskObject 
+                ).then( ( response )=>{
+                    console.log( response.data );
+                   setTask( { ...task, taskName:taskNameFromSwal, assignedTo: taskAssignedToFromSwal } );
+                    Swal.fire('Task updated!', '', 'success')
+                }).catch( ( error )=>{
+                    console.log( `error with update:`, error );
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops, something went wrong!',
+                        text: 'There was an error editing the task.',
+                        footer: 'Check console for details.'
+                        })  
+                })
+         
+            }         
+        } 
+
+
 
     }
-//----------------->BEGIN TRYING THIS OUT
-
-          // Call the updateDBForComplete function in order to update the db and delay --->DIDN'T WORK
-          async function updateDBForComplete( task ) {
-              console.log( `about to do axios call in updateDBForComplete function`)
-            let response = await axios.put( `/todo/completed/${task.id}`, task );
-            if( response.data === 'OK' ) {
-                console.log( `response was OK and now about to call sleep function`)
-                sleep(10000).then( ()=> {
-                    console.log( `done sleep and about to get props`)
-                    props.getTasks(); 
-                } )
-                console.log( `in if of await statement thingie`);
-                
-            } else {
-                alert( 'error' );
-                console.log( 'error' );                
-            }
-          }
-          function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-          }
-
-//<-----------------END TRYING THIS OUT
-
-
     function CompletedTaskRow( props ) {
         let options = {hour: "2-digit", minute: "2-digit"};
         completedDateCell = new Date(task.dateCompleted ).toLocaleDateString() + ' ' +
@@ -154,7 +183,6 @@ function TaskItem( props ) {
         )
         
     }
-
     function NotCompletedTaskRow( props ) {
         return (
             
