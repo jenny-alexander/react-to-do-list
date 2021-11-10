@@ -24,5 +24,5 @@ const PORT = process.env.PORT || 5001;
 
 //spin up server
 app.listen( PORT, ()=>{
-    console.log( `server up on:`, port );
+    console.log( `server up on:`, PORT );
 });
