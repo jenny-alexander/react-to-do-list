@@ -1,23 +1,19 @@
 import axios from "axios";
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import './AddTask.css'
 
 function AddTask( props ){
-    //const[ name, useName ] = useState( null );
     const [ newTask, setNewTask ] = useState ( {
         taskName: '',
         assignedTo: ''
     })
-
     const handleTaskNameChange = ( event )=>{
         setNewTask( {...newTask, taskName: event.target.value })
     }
-
     const handleAssignedToChange = ( event )=>{ 
         setNewTask( {...newTask, assignedTo: event.target.value })
     }
-
     const handleAddEvent = ( ) =>{
         if( newTask.taskName && newTask.assignedTo !== '' ) {
             console.log( `in handleAddEvent with task:`, newTask );
@@ -28,12 +24,9 @@ function AddTask( props ){
                 console.log( error );
             })
         }
-
     }
     return (
         <div className="AddTask">
-            {/* <h3>{JSON.stringify( props )}</h3> */}
-
             <div className="itemInput">
                 <form>
                 <div class="row">
@@ -52,13 +45,10 @@ function AddTask( props ){
                     <button id="addButton" class="btn btn-secondary" onClick={ handleAddEvent }>Add Task</button>
                     </div>
                 </div>
-
                 </form>
             </div>
-
         </div>
     )
-
 }
 
 export default AddTask;

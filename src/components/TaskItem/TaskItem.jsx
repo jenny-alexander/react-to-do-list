@@ -5,7 +5,6 @@ import './TaskItem.css';
 import Swal from "sweetalert2";
 
 function TaskItem( props ) {
-
     const [ task, setTask ] = useState ( {
         id: props.task.id,
         taskName: props.task.task_name,
@@ -13,7 +12,6 @@ function TaskItem( props ) {
         completed: props.task.completed,
         dateCompleted: props.task.date_completed
     })
-
     let completedDateCell = '';
 
     function CompleteButton( ) {
@@ -83,13 +81,11 @@ function TaskItem( props ) {
         //setTask( { ...task, completed: true,
         //                     dateCompleted: new Date().toISOString() } );
 
-        //This is working which.
+        //This is working which doesn't use the hooks we created above. Why???
         setTask( task.completed = true ); //--> TODO: Also, setting to true in DB since couldn't get this hook to work
         setTask( task.dateCompleted = new Date().toISOString() );
         setTask( {...task}); //<--------TODO: Need help with this. This is the only way I could get the updated row to show.
-        
-        //updateDBForComplete( task ); //<---------Testing something out here
-
+    
         //make a call to server via axios 
         axios.put( `/todo/completed/${task.id}`, task ).then( ( response )=>{
             console.log( response.data );  
@@ -110,7 +106,7 @@ function TaskItem( props ) {
                 focusConfirm: false,
                 showCancelButton: true,
                 showCloseButton: true,
-                //here we are grabbing the values entered by the user
+                //Grab the values entered by the user
                 preConfirm: () => {
                     //since task name is mandatory on DB, check to make sure it was entered in popup
                     if ( document.getElementById( 'swal-taskName').value ) {
@@ -196,10 +192,8 @@ function TaskItem( props ) {
         )
         
     }   
-
     return (
               task.completed? <CompletedTaskRow /> : <NotCompletedTaskRow />         
         )
 }
-
 export default TaskItem;
